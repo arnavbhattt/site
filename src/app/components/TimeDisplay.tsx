@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import clsx from "clsx"
 
 export default function TimeDisplay() {
   const [time, setTime] = useState<Date | null>(null)
@@ -26,9 +25,9 @@ export default function TimeDisplay() {
   }
 
   return (
-    <div className="time-card rounded-2xl p-4 md:p-6 text-center">
-      <div className="text-3xl md:text-4xl font-bold gradient-text">{formatTime(time)}</div>
-      <div className="text-gray-400 text-base md:text-lg mt-2">Raleigh, NC</div>
+    <div className="time-card">
+      <div className="text-2xl md:text-3xl font-bold">{formatTime(time)}</div>
+      <div className="text-[--text-secondary] text-sm md:text-base mt-1">Raleigh, NC</div>
     </div>
   )
 } 
