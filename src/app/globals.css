@@ -7,22 +7,21 @@
 
 :root {
   --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 10, 10, 10;
-  --background-end-rgb: 0, 0, 0;
   --background: #0a0a0a;
-  --card-background: #111111;
-  --card-hover: #1a1a1a;
+  --card-background: rgba(22, 22, 22, 0.8);
+  --nav-background: rgba(28, 28, 28, 0.7);
+  --time-card-bg: #1e3a5f;
   --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --accent-blue: #0d47a1;
-  --accent-gradient: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --accent-blue: #3b82f6;
   --blur-bg: rgba(17, 17, 17, 0.7);
+  --nav-hover: rgba(59, 130, 246, 0.1);
+  --nav-active: rgba(59, 130, 246, 0.15);
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-start-rgb));
-  font-family: "Inter", sans-serif;
+  color: var(--text-primary);
+  background: var(--background);
   min-height: 100vh;
   font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   -webkit-font-smoothing: antialiased;
@@ -100,7 +99,7 @@ body {
 
 /* Custom Classes */
 .animate-fade-in {
-  animation: fadeIn 0.6s ease-out;
+  animation: fadeIn 0.5s ease-out;
 }
 
 .animate-slide-in {
@@ -120,7 +119,7 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #64b5f6, #2196f3);
+  background: linear-gradient(to right, #60a5fa, #3b82f6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -132,12 +131,11 @@ body {
 }
 
 .card {
-  background: rgba(26, 26, 26, 0.4);
+  background: var(--card-background);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
+  border-radius: 16px;
+  transition: all 0.3s ease;
 }
 
 .card::before {
@@ -164,72 +162,57 @@ body {
 
 .card:hover {
   border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
 }
 
-.glass-effect {
-  background: rgba(26, 26, 26, 0.7);
+.glass-nav {
+  background: var(--nav-background);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
 }
 
 .time-card {
-  background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(33, 150, 243, 0.05));
-  border: 1px solid rgba(33, 150, 243, 0.1);
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.time-card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.time-card:hover::after {
-  opacity: 1;
-}
-
-.time-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(13, 71, 161, 0.3);
+  background: var(--time-card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
 .nav-item {
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   position: relative;
-  transition: all 0.3s ease;
-  font-weight: 500;
+  overflow: hidden;
+  background: transparent;
+  margin: 0 0.25rem;
 }
 
-.nav-item::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: #2196f3;
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
-}
-
-.nav-item:hover::after,
-.nav-item.active::after {
-  width: 80%;
+.nav-item:hover {
+  color: var(--text-primary);
+  background: rgba(59, 130, 246, 0.05);
+  transform: translateY(-1px);
 }
 
 .nav-item.active {
   color: var(--text-primary);
-  font-weight: 600;
+  background: rgba(59, 130, 246, 0.1);
+  font-weight: 500;
+}
+
+/* Remove the complex hover effects */
+.nav-item::before,
+.nav-item::after {
+  display: none;
+}
+
+/* Remove the span positioning */
+.nav-item span {
+  position: relative;
+  z-index: 1;
 }
 
 .tag {
@@ -258,5 +241,22 @@ body {
   50% {
     opacity: 0.8;
   }
+}
+
+/* Company name hover effects */
+.company-name {
+  transition: all 0.3s ease;
+}
+
+.company-name:hover {
+  transform: scale(1.05);
+}
+
+.company-name.amazon:hover {
+  color: #FF9900;
+}
+
+.company-name.willowtree:hover {
+  color: #00A878;
 }
 
