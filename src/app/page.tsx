@@ -17,6 +17,7 @@ export default function Home() {
   const [activeProjectTab, setActiveProjectTab] = useState("featured")
   const [activeExpTab, setActiveExpTab] = useState("work")
   const [isLoading, setIsLoading] = useState(true)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   useEffect(() => {
     setMounted(true)
@@ -41,6 +42,20 @@ export default function Home() {
     { id: "research", label: "Research" },
   ]
 
+  const images = [
+    "/images/coding.jpg",
+    "/images/pic2.png",
+    "/images/pic3.png"
+  ]
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length)
+  }
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
+  }
+
   // Base styles for common components
   const baseButtonStyles = "transition-all hover:scale-105"
   const baseCardStyles = "card rounded-3xl backdrop-blur-lg bg-opacity-10 hover:bg-opacity-20 transition-all"
@@ -51,10 +66,10 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] p-6 md:p-8">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[350px,1fr] gap-6 md:gap-8">
+    <div className="min-h-screen bg-[#0a0a0a]">
+      <div className="flex">
         {/* Profile Card */}
-        <aside className="card p-8 h-fit sticky top-6">
+        <aside className="fixed w-[350px] card p-8 m-6">
           <div className="text-center">
             <h1 className="text-3xl md:text-4xl font-bold mb-3 gradient-text">Arnav Bhatt</h1>
             <p className="text-[--text-secondary] mb-6">CS @ NCSU. I create cool things using code.</p>
@@ -71,7 +86,7 @@ export default function Home() {
                 </svg>
               </Link>
               <Link
-                href="https://linkedin.com/in/arnavbhat"
+                href="https://linkedin.com/in/arnavbhatt"
                 className="text-[--text-secondary] hover:text-white transition-colors"
               >
                 <span className="sr-only">LinkedIn</span>
@@ -88,9 +103,9 @@ export default function Home() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex flex-col gap-6">
+        <main className="ml-[400px] flex-1 p-6">
           {/* Navigation */}
-          <nav className="glass-nav p-1.5">
+          <nav className="glass-nav p-1.5 mb-6">
             <div className="flex">
               {tabs.map((tab) => (
                 <button
@@ -108,33 +123,71 @@ export default function Home() {
           </nav>
 
           {/* Content */}
-          <div className="card p-6 md:p-8">
+          <div className="max-w-4xl">
             {activeTab === "home" && (
-              <div className="animate-fade-in">
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">Who am I?</h2>
-                <p className="text-[--text-secondary] text-base md:text-lg leading-relaxed">
-                  I'm a Computer Science student at North Carolina State University with a strong foundation in
-                  software development. Currently maintaining a GPA of 3.86, I specialize in building efficient and
-                  scalable applications using modern technologies.
-                </p>
-        </div>
+              <div className="animate-fade-in space-y-6">
+                <div className="card p-6 md:p-8">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4">Who am I?</h2>
+                  <p className="text-[--text-secondary] text-base md:text-lg leading-relaxed">
+                    I'm a Computer Science student at North Carolina State University with a strong foundation in
+                    software development. I specialize in building efficient and
+                    scalable applications using modern technologies.
+                  </p>
+                </div>
+
+                {/* Image carousel */}
+                <div className="card p-4 w-[400px]">
+                  <div className="relative h-[200px] w-full">
+                    <Image
+                      src={images[currentImageIndex]}
+                      alt="Arnav Bhatt"
+                      fill
+                      className={clsx(
+                        "object-cover rounded-lg",
+                        currentImageIndex === 0 && "object-[center_40%]"
+                      )}
+                      priority
+                    />
+                    
+                    {/* Navigation arrows */}
+                    <button 
+                      onClick={prevImage}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white p-2 rounded-full transition-all"
+                      aria-label="Previous image"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                      </svg>
+                    </button>
+                    
+                    <button 
+                      onClick={nextImage}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white p-2 rounded-full transition-all"
+                      aria-label="Next image"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
 
             {activeTab === "projects" && (
               <div className="animate-fade-in">
-                <div className="space-y-6 md:space-y-8 lg:space-y-10">
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6 md:mb-8 lg:mb-12">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text animate-gradient">
+                <div className="space-y-4 md:space-y-6">
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+                    <h2 className="text-2xl md:text-3xl font-bold gradient-text animate-gradient">
                       Projects
                     </h2>
-                    <div className="flex space-x-2 md:space-x-4 bg-[#1a1a1a] rounded-xl md:rounded-2xl p-2 md:p-3">
+                    <div className="flex space-x-2 bg-[#1a1a1a] rounded-xl p-1.5">
                       {projectTabs.map((tab) => (
                         <button
                           key={tab.id}
                           onClick={() => setActiveProjectTab(tab.id)}
                           className={clsx(
-                            "px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4",
-                            "rounded-lg lg:rounded-xl text-base md:text-lg",
+                            "px-3 py-1.5 rounded-lg text-sm",
                             baseButtonStyles,
                             {
                               "bg-[#2a2a2a] text-white": activeProjectTab === tab.id,
@@ -148,38 +201,38 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="space-y-6 md:space-y-8 lg:space-y-10">
-                    <div className="card rounded-3xl p-6 md:p-8 lg:p-12 hover:scale-105 transition-all duration-300 backdrop-blur-lg bg-opacity-10 hover:bg-opacity-20">
-                      <h3 className="text-2xl md:text-3xl lg:text-4xl font-semibold">LogStream</h3>
-                      <p className="text-gray-400 text-lg md:text-xl lg:text-2xl mt-4 md:mt-6 lg:mt-8">
+                  <div className="space-y-4">
+                    <div className="card rounded-2xl p-4 md:p-6 hover:scale-[1.01] transition-all duration-300 backdrop-blur-lg bg-opacity-10 hover:bg-opacity-20">
+                      <h3 className="text-xl font-semibold">LogStream</h3>
+                      <p className="text-gray-400 text-base mt-2">
                         A gRPC-based logging service for distributed systems with Protocol Buffer
                       </p>
-                      <div className="flex flex-wrap gap-2 md:gap-3 lg:gap-4 mt-6 md:mt-8 lg:mt-10">
-                        <span className="tag px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 rounded-lg lg:rounded-xl text-base lg:text-lg">
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        <span className="tag px-3 py-1 rounded-lg text-sm">
                           Go
                         </span>
-                        <span className="tag px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 rounded-lg lg:rounded-xl text-base lg:text-lg">
+                        <span className="tag px-3 py-1 rounded-lg text-sm">
                           gRPC
                         </span>
-                        <span className="tag px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 rounded-lg lg:rounded-xl text-base lg:text-lg">
+                        <span className="tag px-3 py-1 rounded-lg text-sm">
                           Protocol Buffer
                         </span>
                       </div>
                     </div>
 
-                    <div className="card rounded-3xl p-6 md:p-8 lg:p-12 hover:scale-105 transition-all duration-300 backdrop-blur-lg bg-opacity-10 hover:bg-opacity-20">
-                      <h3 className="text-2xl md:text-3xl lg:text-4xl font-semibold">Transit Delay Service</h3>
-                      <p className="text-gray-400 text-lg md:text-xl lg:text-2xl mt-4 md:mt-6 lg:mt-8">
+                    <div className="card rounded-2xl p-4 md:p-6 hover:scale-[1.01] transition-all duration-300 backdrop-blur-lg bg-opacity-10 hover:bg-opacity-20">
+                      <h3 className="text-xl font-semibold">Transit Delay Service</h3>
+                      <p className="text-gray-400 text-base mt-2">
                         Real-time transit information service for Raleigh's Metro Transit
                       </p>
-                      <div className="flex flex-wrap gap-2 md:gap-3 lg:gap-4 mt-6 md:mt-8 lg:mt-10">
-                        <span className="tag px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 rounded-lg lg:rounded-xl text-base lg:text-lg">
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        <span className="tag px-3 py-1 rounded-lg text-sm">
                           Java
                         </span>
-                        <span className="tag px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 rounded-lg lg:rounded-xl text-base lg:text-lg">
+                        <span className="tag px-3 py-1 rounded-lg text-sm">
                           Spring Boot
                         </span>
-                        <span className="tag px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 rounded-lg lg:rounded-xl text-base lg:text-lg">
+                        <span className="tag px-3 py-1 rounded-lg text-sm">
                           AWS
                         </span>
                       </div>
@@ -192,72 +245,74 @@ export default function Home() {
             {activeTab === "experience" && (
               <div className="animate-fade-in">
                 <div className="space-y-6 md:space-y-8 lg:space-y-10">
-                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold gradient-text animate-gradient">
+                  <h2 className="text-2xl md:text-3xl font-bold gradient-text animate-gradient">
                     Experience
                   </h2>
 
                   <div className="space-y-6">
                     {/* Work Experience */}
-                    <div className="card rounded-3xl p-6 md:p-8 transition-all duration-300 backdrop-blur-lg bg-opacity-10 hover:bg-opacity-20 group">
-                      <div className="flex items-center gap-4">
-                        <div className="relative w-12 h-12 rounded-full overflow-hidden">
-          <Image
-                            src="https://companieslogo.com/img/orig/AMZN-e9f942e4.png?t=1632523695"
-                            alt="Amazon Logo"
-                            fill
-                            className="object-contain p-1.5"
-                            priority
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = "https://logo.clearbit.com/amazon.com";
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <a 
-                            href="https://www.amazon.com/prime-video" 
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+                    <a 
+                      href="https://www.amazon.com/gp/video/storefront" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <div className="card rounded-3xl p-6 md:p-8 transition-all duration-300 backdrop-blur-lg bg-opacity-10 hover:bg-opacity-20 group">
+                        <div className="flex items-center gap-4">
+                          <div className="relative w-12 h-12 rounded-full overflow-hidden">
+                            <Image
+                              src="https://companieslogo.com/img/orig/AMZN-e9f942e4.png?t=1632523695"
+                              alt="Amazon Logo"
+                              fill
+                              className="object-contain p-1.5"
+                              priority
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = "https://logo.clearbit.com/amazon.com";
+                              }}
+                            />
+                          </div>
+                          <div>
                             <h3 className="text-xl font-semibold transition-all duration-300 group-hover:text-[#FF9900]">Amazon</h3>
-                          </a>
-                          <p className="text-sm text-gray-400"> Incoming Software Development Engineer Intern • Prime Video</p>
-                          <p className="text-sm text-gray-500 mt-1">May 2025 • Seattle, WA</p>
+                            <p className="text-sm text-gray-400">Incoming Software Development Engineer Intern • Prime Video</p>
+                            <p className="text-sm text-gray-500 mt-1">May 2025 • Seattle, WA</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </a>
 
-                    <div className="card rounded-3xl p-6 md:p-8 transition-all duration-300 backdrop-blur-lg bg-opacity-10 hover:bg-opacity-20 group">
-                      <div className="flex items-center gap-4">
-                        <div className="relative w-12 h-12 rounded-full overflow-hidden">
-          <Image
-                            src="/images/willowtree.png"
-                            alt="WillowTree Logo"
-                            fill
-                            className="object-contain p-1.5"
-                            priority
-                          />
-                        </div>
-                        <div>
-                          <a 
-                            href="https://www.willowtreeapps.com" 
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+                    <a 
+                      href="https://www.willowtreeapps.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <div className="card rounded-3xl p-6 md:p-8 transition-all duration-300 backdrop-blur-lg bg-opacity-10 hover:bg-opacity-20 group">
+                        <div className="flex items-center gap-4">
+                          <div className="relative w-12 h-12 rounded-full overflow-hidden">
+                            <Image
+                              src="/images/willowtree.png"
+                              alt="WillowTree Logo"
+                              fill
+                              className="object-contain p-1.5"
+                              priority
+                            />
+                          </div>
+                          <div>
                             <h3 className="text-xl font-semibold transition-all duration-300 group-hover:text-[#00A878]">WillowTree</h3>
-                          </a>
-                          <p className="text-sm text-gray-400">Software Engineer Intern</p>
-                          <p className="text-sm text-gray-500 mt-1">May 2024 - Aug 2024 • Durham, NC</p>
-                          <p className="text-sm text-gray-400 mt-2">Built OAuth 2.0 server and microservices for government savings platform</p>
+                            <p className="text-sm text-gray-400">Software Engineer Intern</p>
+                            <p className="text-sm text-gray-500 mt-1">May 2024 - Aug 2024 • Durham, NC</p>
+                            <p className="text-sm text-gray-400 mt-2">Built OAuth 2.0 server and microservices for government savings platform</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </a>
 
                     {/* Research Experience */}
                     <div className="flex items-center gap-2 mb-6">
                       <h3 className="text-2xl font-bold">Undergrad Research</h3>
                       <div className="relative w-8 h-8">
-          <Image
+                        <Image
                           src="/images/ncsu-wolfpack.png"
                           alt="NCSU Wolfpack Logo"
                           fill
