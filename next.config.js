@@ -14,6 +14,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'assets.website-files.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.scdn.co',
+      },
     ],
   },
 };
